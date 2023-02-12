@@ -38,17 +38,18 @@ mt = MusicTransformer(
 mt.load_state_dict(torch.load(args.model_dir+'/final.pth'))
 mt.test()
 
-print(config.condition_file)
-if config.condition_file is not None:
-    inputs = np.array([encode_midi('dataset/midi/BENABD10.mid')[:500]])
-else:
-    inputs = np.array([[24, 28, 31]])
-inputs = torch.from_numpy(inputs)
-result = mt(inputs, config.length, gen_summary_writer)
+for index in range(42 ,44):
+    print(config.condition_file)
+    if config.condition_file is not None:
+        inputs = np.array([encode_midi('dataset/midi/BENABD10.mid')[:500]])
+    else:
+        inputs = np.array([[24, 28, 31]])
+    inputs = torch.from_numpy(inputs)
+    result = mt(inputs, config.length, gen_summary_writer)
 
-for i in result:
-    print(i)
+    for i in result:
+        print(i)
 
-decode_midi(result, file_path=config.save_path)
+    decode_midi(result, file_path=config.save_path + f'output_{index}' + '.mid')
 
 gen_summary_writer.close()
